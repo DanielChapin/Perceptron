@@ -1,7 +1,5 @@
 package daniel.perceptron.learning;
 
-import java.awt.Point;
-
 public class Perceptron {
 	
 	float[] weights = new float[2];
@@ -14,23 +12,17 @@ public class Perceptron {
 			weights[i] = (float) Math.random() * 2 - 1;
 	}
 	
-	public void train(Point[] points, int slope) {
-		int[] coordinates = {points[0].y, points[1].y};
-		int guess = guess(coordinates);
+	public void train(int[] inputs, int slope) {
+		int guess = guess(inputs);
 		int error = slope - guess;
 		for (int i = 0; i < weights.length; i++)
-			weights[i] += error * coordinates[i] * learningRate;
+			weights[i] += error * inputs[i] * learningRate;
 	}
 	
-	public int guess(Point[] points) {
-		int[] coordinates = {points[0].y, points[1].y};
-		return guess(coordinates);
-	}
-	
-	int guess(int[] coordinates) {
+	public int guess(int[] inputs) {
 		float sum = 0;
-		for (int i = 0; i < coordinates.length; i++)
-			sum += coordinates[i] * weights[i];
+		for (int i = 0; i < inputs.length; i++)
+			sum += inputs[i] * weights[i];
 		return activate(sum);
 	}
 	

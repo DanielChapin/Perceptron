@@ -60,7 +60,7 @@ public class Main extends JFrame implements MouseListener {
 			g.drawLine(points[0].x, points[0].y, points[1].x, points[1].y);
 			g.drawString("Slope: " + getSlope(), 16, 16);
 			g.drawString("Perceptron Guess: ", getWidth() - 160, 16);
-			int guess = perceptron.guess(points);
+			int guess = perceptron.guess(getYValues());
 			g.drawString("Slope " + ((guess == 1) ? ">= 0" : "< 0"), getWidth() - 160, 32);
 			boolean correct = (guess == 1 && getSlope() >= 0) || (guess == -1 && getSlope() < 0);
 			if (correct)
@@ -78,6 +78,11 @@ public class Main extends JFrame implements MouseListener {
 	
 	float getSlope() {
 		return (float) (points[0].y - points[1].y) / (points[1].x - points[0].x);
+	}
+	
+	int[] getYValues() {
+		int[] yVals = {points[0].y, points[1].y};
+		return yVals;
 	}
 
 	@Override
@@ -101,7 +106,7 @@ public class Main extends JFrame implements MouseListener {
 			// Set either the first or second point to the press location depending on the last one set.
 			points[pointIndex] = pressLocation;
 			if (points[1] != null)
-				perceptron.train(points, (getSlope() >= 0) ? 1 : -1);
+				perceptron.train(getYValues(), (getSlope() >= 0) ? 1 : -1);
 			// Flip the bit. (if its 1 set it to 0 and if its 0 set it to 1)
 			pointIndex = (pointIndex == 0) ? 1 : 0;
 			render();
