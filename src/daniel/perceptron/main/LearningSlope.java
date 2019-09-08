@@ -13,7 +13,7 @@ import javax.swing.JFrame;
 
 import daniel.perceptron.learning.Perceptron;
 
-public class Main extends JFrame implements MouseListener {
+public class LearningSlope extends JFrame implements MouseListener {
 	
 	Canvas canvas = new Canvas();
 	
@@ -25,10 +25,10 @@ public class Main extends JFrame implements MouseListener {
 	int correctGuesses = 0, totalGuesses = 0;
 	
 	public static void main(String[] args) {
-		new Main();
+		new LearningSlope();
 	}
 	
-	Main() {
+	LearningSlope() {
 		// Setup the JFrame
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(1200, 800);
