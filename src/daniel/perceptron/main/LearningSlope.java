@@ -20,7 +20,7 @@ public class LearningSlope extends JFrame implements MouseListener {
 	int pointIndex = 0;
 	Point[] points = new Point[2];
 	
-	Perceptron perceptron = new Perceptron();
+	Perceptron perceptron = new Perceptron(2);
 	
 	int correctGuesses = 0, totalGuesses = 0;
 	
@@ -45,7 +45,6 @@ public class LearningSlope extends JFrame implements MouseListener {
 		canvas.addMouseListener(this);
 		
 		setVisible(true);
-		getContentPane().repaint();
 		canvas.createBufferStrategy(3);
 	}
 	

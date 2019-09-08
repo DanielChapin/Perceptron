@@ -2,11 +2,12 @@ package daniel.perceptron.learning;
 
 public class Perceptron {
 	
-	float[] weights = new float[2];
+	float[] weights;
 	
 	float learningRate = 0.01f;
 	
-	public Perceptron() {
+	public Perceptron(int numInputs) {
+		weights = new float[numInputs];
 		// Generate random values for all the weights at the beginning
 		for (int i = 0; i < weights.length; i++)
 			weights[i] = (float) Math.random() * 2 - 1;
