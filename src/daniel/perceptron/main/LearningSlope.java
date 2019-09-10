@@ -23,6 +23,9 @@ public class LearningSlope extends JFrame implements MouseListener, MouseMotionL
 	
 	Perceptron perceptron = new Perceptron(2);
 	
+	int guess = 0;
+	boolean correct;
+	
 	int correctGuesses = 0, totalGuesses = 0;
 	
 	Point mouseLocation = new Point(0, 0);
@@ -72,16 +75,13 @@ public class LearningSlope extends JFrame implements MouseListener, MouseMotionL
 		g.setColor(getForeground());
 		if (points[1] != null) {
 			g.drawLine(points[0].x, points[0].y, points[1].x, points[1].y);
-			g.drawString("Slope: " + getSlope(), 16, 16);
-			g.drawString("Perceptron Guess: ", getWidth() - 160, 16);
-			int guess = perceptron.guess(getYValues());
-			g.drawString("Slope " + ((guess == 1) ? ">= 0" : "< 0"), getWidth() - 160, 32);
-			boolean correct = (guess == 1 && getSlope() >= 0) || (guess == -1 && getSlope() < 0);
-			if (correct)
-				correctGuesses++;
-			totalGuesses++;
-			g.drawString("Guess is " + ((correct) ? "correct" : "incorrect"), getWidth() - 160, 48);
-			g.drawString("Percent correct: " + (int) ((float) correctGuesses / totalGuesses * 100) + "%", getWidth() - 160, 64);
+			if (guess != 0) {
+				g.drawString("Slope: " + getSlope(), 16, 16);
+				g.drawString("Perceptron Guess: ", getWidth() - 160, 16);
+				g.drawString("Slope " + ((guess == 1) ? ">= 0" : "< 0"), getWidth() - 160, 32);
+				g.drawString("Guess is " + ((correct) ? "correct" : "incorrect"), getWidth() - 160, 48);
+				g.drawString("Percent correct: " + (int) ((float) correctGuesses / totalGuesses * 100) + "%", getWidth() - 160, 64);
+			}
 		}
 		g.setColor(Color.BLUE);
 		if (points[0] != null) {
@@ -122,10 +122,17 @@ public class LearningSlope extends JFrame implements MouseListener, MouseMotionL
 		} else {
 			// Set either the first or second point to the press location depending on the last one set.
 			points[pointIndex] = pressLocation;
-			if (points[1] != null)
+			if (points[1] != null) {
 				perceptron.train(getYValues(), (getSlope() >= 0) ? 1 : -1);
+				guess = perceptron.guess(getYValues());
+				correct = (guess == 1 && getSlope() >= 0) || (guess == -1 && getSlope() < 0);
+				if (correct)
+					correctGuesses++;
+				totalGuesses++;
+			}
 			// Flip the bit. (if its 1 set it to 0 and if its 0 set it to 1)
 			pointIndex = (pointIndex == 0) ? 1 : 0;
+			
 		}
 	}
 
