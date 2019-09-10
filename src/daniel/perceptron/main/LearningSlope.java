@@ -7,13 +7,14 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
 
 import daniel.perceptron.learning.Perceptron;
 
-public class LearningSlope extends JFrame implements MouseListener {
+public class LearningSlope extends JFrame implements MouseListener, MouseMotionListener {
 	
 	Canvas canvas = new Canvas();
 	
@@ -23,6 +24,8 @@ public class LearningSlope extends JFrame implements MouseListener {
 	Perceptron perceptron = new Perceptron(2);
 	
 	int correctGuesses = 0, totalGuesses = 0;
+	
+	Point mouseLocation = new Point(0, 0);
 	
 	public static void main(String[] args) {
 		new LearningSlope();
@@ -34,7 +37,7 @@ public class LearningSlope extends JFrame implements MouseListener {
 		setSize(1200, 800);
 		setResizable(false);
 		setLocationRelativeTo(null);
-		setTitle("Machine Learning Basics");
+		setTitle("Learning Slope");
 		setBackground(Color.WHITE);
 		setForeground(Color.RED);
 		setFont(new Font(Font.DIALOG_INPUT, Font.PLAIN, 16));
@@ -43,9 +46,21 @@ public class LearningSlope extends JFrame implements MouseListener {
 		
 		// Add the mouse listener for mouse inputs
 		canvas.addMouseListener(this);
+		canvas.addMouseMotionListener(this);
 		
 		setVisible(true);
 		canvas.createBufferStrategy(3);
+		startRendering();
+	}
+	
+	void startRendering() {
+		long now = System.nanoTime(), lastLoop = now, loopTime = 1000000000 / 30;
+		while (true) {
+			if ((now = System.nanoTime()) - lastLoop >= loopTime) {
+				render();
+				lastLoop = now;
+			}
+		}
 	}
 	
 	void render() {
@@ -69,8 +84,11 @@ public class LearningSlope extends JFrame implements MouseListener {
 			g.drawString("Percent correct: " + (int) ((float) correctGuesses / totalGuesses * 100) + "%", getWidth() - 160, 64);
 		}
 		g.setColor(Color.BLUE);
-		if (points[0] != null)
-			g.drawRect(points[(pointIndex == 1) ? 0 : 1].x - 2, points[(pointIndex == 1) ? 0 : 1].y - 2, 5, 5);
+		if (points[0] != null) {
+			Point selectedPoint = points[(pointIndex == 1) ? 0 : 1];
+			g.drawRect(selectedPoint.x - 2, selectedPoint.y - 2, 5, 5);
+			g.drawLine(selectedPoint.x, selectedPoint.y, mouseLocation.x, mouseLocation.y);
+		}
 		g.dispose();
 		bufferStrategy.show();
 	}
@@ -108,7 +126,6 @@ public class LearningSlope extends JFrame implements MouseListener {
 				perceptron.train(getYValues(), (getSlope() >= 0) ? 1 : -1);
 			// Flip the bit. (if its 1 set it to 0 and if its 0 set it to 1)
 			pointIndex = (pointIndex == 0) ? 1 : 0;
-			render();
 		}
 	}
 
@@ -118,6 +135,15 @@ public class LearningSlope extends JFrame implements MouseListener {
 
 	@Override
 	public void mouseExited(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		mouseLocation = e.getPoint();
 	}
 	
 }

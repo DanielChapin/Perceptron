@@ -31,7 +31,7 @@ public class PointCategorization extends JFrame implements MouseListener {
 		setSize(1200, 800);
 		setResizable(false);
 		setLocationRelativeTo(null);
-		setTitle("Machine Learning Basics");
+		setTitle("Point Categorization");
 		setBackground(Color.WHITE);
 		setForeground(Color.RED);
 		setFont(new Font(Font.DIALOG_INPUT, Font.PLAIN, 16));
@@ -65,6 +65,7 @@ public class PointCategorization extends JFrame implements MouseListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		render();
 	}
 
 	@Override
